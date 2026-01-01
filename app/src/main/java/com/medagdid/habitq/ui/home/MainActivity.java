@@ -3,6 +3,7 @@ package com.medagdid.habitq.ui.home;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.medagdid.habitq.R;
 import com.medagdid.habitq.data.UserRepository;
@@ -19,6 +23,9 @@ import com.medagdid.habitq.model.User;
 import com.medagdid.habitq.model.Habit;
 import com.medagdid.habitq.ui.habits.HabitAdapter;
 import com.medagdid.habitq.util.XpManager;
+import com.medagdid.habitq.util.TimeUtils;
+import com.medagdid.habitq.worker.HabitResetWorker;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         initData();
-        setupHabits();   // ← Don't forget this
+
+        // Schedule the daily reset worker at midnight
+        scheduleDailyHabitReset();
+
+        setupHabits();
         renderUser();
     }
 
@@ -70,6 +81,24 @@ public class MainActivity extends AppCompatActivity {
         // Streak (global for now – later per habit)
         streakText.setText("🔥 Streak: " + getGlobalStreak() + " days");
     }
+
+    private void scheduleDailyHabitReset() {
+        long initialDelay = TimeUtils.getDelayUntilMidnight();
+
+        PeriodicWorkRequest dailyResetWork = new PeriodicWorkRequest.Builder(
+                HabitResetWorker.class,
+                24, TimeUnit.HOURS
+        )
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "daily_habit_reset",
+                ExistingPeriodicWorkPolicy.REPLACE,
+                dailyResetWork
+        );
+    }
+
 
     private int getCharacterForLevel(int level) {
         if (level >= 10) {

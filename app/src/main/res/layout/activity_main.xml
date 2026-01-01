@@ -11,7 +11,7 @@
         android:id="@+id/characterImage"
         android:layout_width="180dp"
         android:layout_height="180dp"
-        android:src="@drawable/Johnathan"
+        android:src="@drawable/johnathan"
         android:contentDescription="Character"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +74,7 @@
 
     <!-- Habit List -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/habitRecycler"
+        android:id="@+id/habitsRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"

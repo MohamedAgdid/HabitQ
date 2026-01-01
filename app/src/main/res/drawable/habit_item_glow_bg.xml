@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer neon border -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1A1A1F" />
+            <stroke android:width="2dp" android:color="#FF3B3B" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Inner gradient for depth -->
+    <item android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#1A1A1F"
+                android:endColor="#0D0D12"
+                android:angle="90" />
+            <corners android:radius="14dp" />
+        </shape>
+    </item>
+
+</layer-list>

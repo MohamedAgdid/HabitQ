@@ -1,4 +1,5 @@
 package com.medagdid.habitq.model;
+import java.time.LocalDate;
 
 public class Habit {
 
@@ -25,5 +26,12 @@ public class Habit {
 
     public void setStreak(int streak) { this.streak = streak; }
     public void setLastCompletedDate(String date) { this.lastCompletedDate = date; }
+
+    public boolean isCompletedToday() {
+        if (lastCompletedDate == null) return false;
+
+        String today = LocalDate.now().toString(); // yyyy-MM-dd
+        return today.equals(lastCompletedDate);
+    }
 }
 

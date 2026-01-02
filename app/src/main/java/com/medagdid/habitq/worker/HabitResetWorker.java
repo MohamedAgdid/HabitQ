@@ -1,6 +1,5 @@
 package com.medagdid.habitq.worker;
 
-
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -25,34 +24,45 @@ public class HabitResetWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        HabitRepository habitRepo = new HabitRepository(getApplicationContext());
-        UserRepository userRepo = new UserRepository(getApplicationContext());
+        try {
+            HabitRepository habitRepo = new HabitRepository(getApplicationContext());
+            UserRepository userRepo = new UserRepository(getApplicationContext());
 
-        List<Habit> habits = habitRepo.getHabits();
-        User user = userRepo.getUser();
+            List<Habit> habits = habitRepo.getHabits();
+            User user = userRepo.getUser();
 
-        LocalDate today = LocalDate.now(ZoneId.systemDefault());
-        LocalDate yesterday = today.minusDays(1);
+            LocalDate today = LocalDate.now(ZoneId.systemDefault());
+            LocalDate yesterday = today.minusDays(1);
 
-        for (Habit habit : habits) {
-            if (habit.getLastCompletedDate() == null) continue;
+            for (Habit habit : habits) {
+                String lastDate = habit.getLastCompletedDate();
+                if (lastDate == null) continue;
 
-            LocalDate lastCompleted = LocalDate.parse(habit.getLastCompletedDate());
+                try {
+                    LocalDate lastCompleted = LocalDate.parse(lastDate);
 
-            if (!lastCompleted.equals(yesterday) && !lastCompleted.equals(today)) {
-                // Streak broken
-                habit.setStreak(0);
+                    if (!lastCompleted.equals(yesterday) && !lastCompleted.equals(today)) {
+                        // Streak broken
+                        habit.setStreak(0);
 
-                // Optional XP penalty
-                user.setCurrentXP(Math.max(0, user.getCurrentXP() - 5));
+                        // Optional XP penalty
+                        user.setCurrentXP(Math.max(0, user.getCurrentXP() - 5));
+                    }
+                } catch (Exception e) {
+                    // If date corrupted, reset streak anyway
+                    habit.setStreak(0);
+                }
             }
+
+            // Save changes
+            habitRepo.saveHabits(habits);
+            userRepo.saveUser(user);
+
+            return Result.success();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.retry();
         }
-
-        // Save changes
-        habitRepo.saveHabits(habits);
-        userRepo.saveUser(user);
-
-        return Result.success();
     }
 }
-

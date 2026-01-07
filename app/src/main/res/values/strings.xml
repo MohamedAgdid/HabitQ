@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HabitQ</string>
+    <string name="read_10_pages">Read 10 pages</string>
 </resources>

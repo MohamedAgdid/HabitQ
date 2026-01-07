@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Read 10 pages"
+            android:text="@string/read_10_pages"
             android:textSize="18sp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"/>
@@ -31,9 +31,9 @@
             android:id="@+id/checkIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/checkIcon"
+            android:src="@drawable/check"
             android:alpha="0.3"
-            android:tint="#FF3B3B"/>
+            app:tint="#FF3B3B" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

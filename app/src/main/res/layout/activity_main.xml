@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/characterImage"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="165dp"
+        android:layout_height="116dp"
         android:contentDescription="Character"
         android:scaleType="centerCrop"
         android:src="@drawable/johnathan"
@@ -33,7 +33,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="89dp"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -84,26 +84,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/statsCard" />
 
-    <ImageButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNewHabit"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="656dp"
-
-        android:background="@android:color/transparent"
-        android:clickable="true"
-
-        android:contentDescription="Add New Habit"
-        android:focusable="true"
-
-        android:scaleType="centerInside"
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/accent_red"
+        android:contentDescription="@string/add_new_habit"
         android:src="@drawable/add"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/accent_red" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

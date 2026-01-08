@@ -6,7 +6,7 @@ public class Habit {
     private String id;
     private String name;
     private int streak;
-    private String lastCompletedDate; // yyyy-MM-dd
+    private String lastCompletedDate;
     private int xpValue;
 
     public Habit(String id, String name, int xpValue) {

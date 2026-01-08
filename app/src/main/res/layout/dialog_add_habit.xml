@@ -5,15 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:text="New Habit"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/accent_red"
-        android:layout_marginBottom="12dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <EditText
         android:id="@+id/habitNameInput"
         android:hint="Habit name (e.g. Read 10 pages)"

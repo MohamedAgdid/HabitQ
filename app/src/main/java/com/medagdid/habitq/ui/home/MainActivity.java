@@ -1,6 +1,8 @@
 package com.medagdid.habitq.ui.home;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -45,9 +47,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
+
+        findViewById(R.id.addNewHabit).setOnClickListener(v -> {
+            showAddHabitDialog();
+        });
+
+
+
         initData();
 
-        // STEP 8b: Schedule daily habit reset at midnight
         scheduleDailyHabitReset();
 
         setupHabits();
@@ -70,19 +78,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void renderUser() {
-        // LEVEL
         levelText.setText("LEVEL " + user.getLevel());
-
-        // XP bar
         int xpForNext = XpManager.xpForNextLevel(user.getLevel());
         xpProgress.setMax(xpForNext);
         xpProgress.setProgress(user.getCurrentXP());
-
-        // Character image by level
         characterImage.setImageResource(getCharacterForLevel(user.getLevel()));
-
-        // GLOBAL STREAK
-        streakText.setText("🔥 Streak: " + getGlobalStreak() + " days");
+        streakText.setText("Streak: " + getGlobalStreak() + " days");
     }
 
     private int getCharacterForLevel(int level) {
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         return R.drawable.johnathan;
     }
 
-    // SUM of all habit streaks → dynamic global streak
+
     private int getGlobalStreak() {
         List<Habit> habits = habitRepository.getHabits();
         int total = 0;
@@ -102,18 +103,16 @@ public class MainActivity extends AppCompatActivity {
     private void setupHabits() {
         List<Habit> habits = habitRepository.getHabits();
 
-        // If empty, add sample habits
-        if (habits.isEmpty()) {
-            habits.add(new Habit("1", "Read 10 pages", 20));
-            habits.add(new Habit("2", "Workout 15 min", 30));
-            habits.add(new Habit("3", "No sugar today", 15));
-            habitRepository.saveHabits(habits);
-        }
+//        if (habits.isEmpty()) {
+//            habits.add(new Habit("1", "Read 10 pages", 20));
+//            habits.add(new Habit("2", "Workout 15 min", 30));
+//            habits.add(new Habit("3", "No sugar today", 15));
+//            habitRepository.saveHabits(habits);
+//        }
 
         habitAdapter = new HabitAdapter(habits, habit -> {
             String today = LocalDate.now().toString();
 
-            // STREAK LOGIC
             if (habit.getLastCompletedDate() != null) {
                 String yesterday = LocalDate.now().minusDays(1).toString();
                 if (habit.getLastCompletedDate().equals(yesterday)) {
@@ -127,23 +126,21 @@ public class MainActivity extends AppCompatActivity {
 
             habit.setLastCompletedDate(today);
 
-            // XP LOGIC
             boolean leveledUp = XpManager.addXp(user, habit.getXpValue());
 
-            // SAVE CHANGES
+
             habitRepository.saveHabits(habits);
             userRepository.saveUser(user);
 
-            // REFRESH UI
+
             renderUser();
-            habitAdapter.notifyDataSetChanged();
+
         });
 
         habitsRecycler.setLayoutManager(new LinearLayoutManager(this));
         habitsRecycler.setAdapter(habitAdapter);
     }
 
-    // STEP 8b: Check for missed days and reset streaks immediately on app launch
     private void checkForStreakBreaks() {
         List<Habit> habits = habitRepository.getHabits();
         boolean updated = false;
@@ -155,11 +152,10 @@ public class MainActivity extends AppCompatActivity {
             if (habit.getLastCompletedDate() != null) {
                 if (!habit.getLastCompletedDate().equals(yesterday) &&
                         !habit.getLastCompletedDate().equals(today)) {
-                    // STREAK BROKEN
+
                     habit.setStreak(0);
                     updated = true;
 
-                    // Optional small XP penalty
                     user.setCurrentXP(Math.max(0, user.getCurrentXP() - 5));
                 }
             }
@@ -169,11 +165,9 @@ public class MainActivity extends AppCompatActivity {
             habitRepository.saveHabits(habits);
             userRepository.saveUser(user);
             renderUser();
-            habitAdapter.notifyDataSetChanged();
+
         }
     }
-
-    // STEP 8b: Schedule WorkManager to reset habits daily at midnight
     private void scheduleDailyHabitReset() {
         long initialDelay = TimeUtils.getDelayUntilMidnight();
 
@@ -190,4 +184,35 @@ public class MainActivity extends AppCompatActivity {
                 dailyResetWork
         );
     }
+
+    private void showAddHabitDialog() {
+        View dialogView = getLayoutInflater()
+                .inflate(R.layout.dialog_add_habit, null);
+
+        EditText habitNameInput = dialogView.findViewById(R.id.habitNameInput);
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Add Habit")
+                .setView(dialogView)
+                .setPositiveButton("Add", (dialog, which) -> {
+                    String name = habitNameInput.getText().toString().trim();
+
+                    if (name.isEmpty()) return;
+
+                    Habit newHabit = new Habit(
+                            String.valueOf(System.currentTimeMillis()),
+                            name,
+                            20
+                    );
+
+                    habitRepository.addHabit(newHabit);
+                    habitAdapter.addHabit(newHabit);
+
+
+
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
 }

@@ -42,19 +42,19 @@ public class HabitResetWorker extends Worker {
                     LocalDate lastCompleted = LocalDate.parse(lastDate);
 
                     if (!lastCompleted.equals(yesterday) && !lastCompleted.equals(today)) {
-                        // Streak broken
+
                         habit.setStreak(0);
 
-                        // Optional XP penalty
+
                         user.setCurrentXP(Math.max(0, user.getCurrentXP() - 5));
                     }
                 } catch (Exception e) {
-                    // If date corrupted, reset streak anyway
+
                     habit.setStreak(0);
                 }
             }
 
-            // Save changes
+
             habitRepo.saveHabits(habits);
             userRepo.saveUser(user);
 

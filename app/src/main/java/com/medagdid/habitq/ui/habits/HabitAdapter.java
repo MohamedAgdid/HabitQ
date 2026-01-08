@@ -66,4 +66,10 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             check = itemView.findViewById(R.id.checkIcon);
         }
     }
+
+    public void addHabit(Habit habit) {
+        habits.add(habit);
+        notifyItemInserted(habits.size() - 1);
+    }
+
 }

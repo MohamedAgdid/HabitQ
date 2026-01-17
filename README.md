@@ -5,6 +5,12 @@ Users progress through habits as if completing game levels, reinforcing consiste
 
 ---
 
+## Demo
+
+<img src="https://github.com/user-attachments/assets/f523ac95-dbb6-4a49-ba89-a46475d21e4f" width="300px" />
+
+---
+
 ## Project Overview
 
 This repository contains an **Android application developed following professional engineering practices**, even though it was delivered in an academic context.
@@ -76,9 +82,5 @@ The application follows a **layered architecture** inspired by **MVVM principles
 * Defensive coding to avoid crashes
 * Ready for unit testing expansion
 
----
 
-## Demo
-
-<img src="https://github.com/user-attachments/assets/f523ac95-dbb6-4a49-ba89-a46475d21e4f" width="300px" />
 

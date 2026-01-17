@@ -16,14 +16,15 @@ import java.util.List;
 
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder> {
 
-    public interface OnHabitClickListener {
+    public interface OnHabitActionListener {
         void onHabitCompleted(Habit habit);
+        void onHabitDelete(Habit habit);
     }
 
     private final List<Habit> habits;
-    private final OnHabitClickListener listener;
+    private final OnHabitActionListener listener;
 
-    public HabitAdapter(List<Habit> habits, OnHabitClickListener listener) {
+    public HabitAdapter(List<Habit> habits, OnHabitActionListener listener) {
         this.habits = habits;
         this.listener = listener;
     }
@@ -43,12 +44,18 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         holder.name.setText(habit.getName());
         holder.check.setAlpha(habit.isCompletedToday() ? 1f : 0.3f);
 
+        // Complete habit
         holder.itemView.setOnClickListener(v -> {
             if (!habit.isCompletedToday()) {
                 listener.onHabitCompleted(habit);
                 notifyItemChanged(position);
             }
         });
+
+        // Delete habit
+        holder.delete.setOnClickListener(v ->
+                listener.onHabitDelete(habit)
+        );
     }
 
     @Override
@@ -59,17 +66,13 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
     static class HabitViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         ImageView check;
+        ImageView delete;
 
         HabitViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.habitName);
             check = itemView.findViewById(R.id.checkIcon);
+            delete = itemView.findViewById(R.id.deleteIcon);
         }
     }
-
-    public void addHabit(Habit habit) {
-        habits.add(habit);
-        notifyItemInserted(habits.size() - 1);
-    }
-
 }

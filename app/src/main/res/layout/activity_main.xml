@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_dark"
@@ -11,43 +11,40 @@
         android:id="@+id/characterImage"
         android:layout_width="165dp"
         android:layout_height="116dp"
-        android:contentDescription="Character"
+        android:contentDescription="@string/character"
         android:scaleType="centerCrop"
         android:src="@drawable/johnathan"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Stats Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/statsCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         app:cardBackgroundColor="@color/card_dark"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@id/characterImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/characterImage">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="89dp"
+            android:layout_height="74dp"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Level -->
             <TextView
                 android:id="@+id/levelText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LEVEL 1"
+                android:text="@string/level_1"
                 android:textColor="@color/accent_red"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
-            <!-- XP Bar -->
             <ProgressBar
                 android:id="@+id/xpProgress"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -55,48 +52,61 @@
                 android:layout_height="10dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/xp_bg"
+                android:clipToOutline="true"
                 android:max="150"
                 android:progress="40"
                 android:progressTint="@color/accent_red" />
 
-            <!-- Streak -->
             <TextView
                 android:id="@+id/streakText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="🔥 Streak: 0 days"
+                android:layout_marginTop="12dp"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Habit List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/habitsRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statsCard" />
+        app:layout_constraintTop_toBottomOf="@id/statsCard"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageView
         android:id="@+id/addNewHabit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="628dp"
+        android:layout_marginEnd="8dp"
         android:backgroundTint="@color/accent_red"
         android:contentDescription="@string/add_new_habit"
         android:src="@drawable/add"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:elevation="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/characterImage"
+        app:maxImageSize="32dp"
+        app:tint="@android:color/holo_red_dark" />
 
+    <ImageView
+        android:id="@+id/iconStats"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/statistics"
+        android:src="@drawable/ic_stats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/characterImage"
+        app:tint="@android:color/holo_red_dark" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,25 +15,37 @@
         android:gravity="center_vertical"
         android:background="@drawable/habit_item_glow_bg">
 
-        <!-- Habit Name -->
         <TextView
             android:id="@+id/habitName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/read_10_pages"
-            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <!-- Check Icon -->
+
         <ImageView
             android:id="@+id/checkIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/check"
             android:alpha="0.3"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_check"
             app:tint="#FF3B3B" />
+
+        <ImageView
+            android:id="@+id/deleteIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_close"
+            android:contentDescription="@string/delete_habit_ic"
+            android:clickable="true"
+            android:focusable="true"
+            app:tint="@color/accent_red" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -2,4 +2,15 @@
     <string name="app_name">HabitQ</string>
     <string name="read_10_pages">Read 10 pages</string>
     <string name="add_new_habit">Add New Habit</string>
+    <string name="delete_habit">Delete habit</string>
+    <string name="statistics">Statistics</string>
+    <string name="character">Character</string>
+    <string name="level_1">LEVEL 1</string>
+    <string name="completed_habits_0">Completed habits: 0</string>
+    <string name="total_habits_0">Total habits: 0</string>
+    <string name="your_statistics">Your Statistics</string>
+    <string name="graph_placeholder">Graph Placeholder</string>
+    <string name="habit_name_e_g_read_10_pages">Habit name (e.g. Read 10 pages)</string>
+    <string name="delete_habit_ic">Delete habit</string>
+    <string name="todo">TODO</string>
 </resources>

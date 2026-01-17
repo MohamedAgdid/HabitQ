@@ -7,7 +7,7 @@
 
     <EditText
         android:id="@+id/habitNameInput"
-        android:hint="Habit name (e.g. Read 10 pages)"
+        android:hint="@string/habit_name_e_g_read_10_pages"
         android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

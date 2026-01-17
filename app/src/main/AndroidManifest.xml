@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HabitQ">
 
-        <!-- 🚀 LAUNCHER ACTIVITY -->
         <activity
             android:name=".ui.home.MainActivity"
             android:exported="true">
@@ -23,6 +22,9 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name=".ui.stats.StatisticsActivity" />
+
 
     </application>
 

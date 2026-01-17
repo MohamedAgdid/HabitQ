@@ -1,13 +1,16 @@
 package com.medagdid.habitq.ui.home;
 
-
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,11 +26,10 @@ import com.medagdid.habitq.data.UserRepository;
 import com.medagdid.habitq.model.Habit;
 import com.medagdid.habitq.model.User;
 import com.medagdid.habitq.ui.habits.HabitAdapter;
+import com.medagdid.habitq.ui.stats.StatisticsActivity;
 import com.medagdid.habitq.util.TimeUtils;
 import com.medagdid.habitq.util.XpManager;
 import com.medagdid.habitq.worker.HabitResetWorker;
-
-import com.medagdid.habitq.ui.stats.StatisticsActivity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     private HabitAdapter habitAdapter;
     private List<Habit> habits;
+
+    private MediaPlayer bgMusic;
+    private boolean musicOn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +73,9 @@ public class MainActivity extends AppCompatActivity {
         checkForStreakBreaks();
         scheduleDailyHabitReset();
         renderUser();
-    }
 
+        startBackgroundMusic();
+    }
 
     private void initViews() {
         characterImage = findViewById(R.id.characterImage);
@@ -84,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         habitRepository = new HabitRepository(this);
         user = userRepository.getUser();
     }
-
 
     private void setupHabits() {
         habits = habitRepository.getHabits();
@@ -123,6 +128,16 @@ public class MainActivity extends AppCompatActivity {
         userRepository.saveUser(user);
 
         renderUser();
+
+        // Play check sound
+        playCheckSound();
+    }
+
+    private void playCheckSound() {
+        if (!musicOn) return;
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.check);
+        mp.setOnCompletionListener(MediaPlayer::release);
+        mp.start();
     }
 
     private void showDeleteDialog(Habit habit) {
@@ -144,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
 
         renderUser();
     }
-
 
     private void renderUser() {
         levelText.setText("LEVEL " + user.getLevel());
@@ -168,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
         for (Habit h : habits) total += h.getStreak();
         return total;
     }
-    
 
     private void showAddHabitDialog() {
         View dialogView = getLayoutInflater()
@@ -196,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
 
     private void checkForStreakBreaks() {
         String today = LocalDate.now().toString();
@@ -237,5 +249,76 @@ public class MainActivity extends AppCompatActivity {
                         ExistingPeriodicWorkPolicy.REPLACE,
                         work
                 );
+    }
+
+    private void startBackgroundMusic() {
+        if (!musicOn) return;
+        if (bgMusic == null) {
+            bgMusic = MediaPlayer.create(this, R.raw.theme);
+            bgMusic.setLooping(true);
+            bgMusic.start();
+        } else if (!bgMusic.isPlaying()) {
+            bgMusic.start();
+        }
+    }
+
+    private void stopBackgroundMusic() {
+        if (bgMusic != null && bgMusic.isPlaying()) {
+            bgMusic.pause();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_reset_level) {
+            resetLevel();
+            return true;
+        } else if (id == R.id.menu_about) {
+            Toast.makeText(this, "HabitQ v1.0 - Mohamed Agdid - 20250117", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.menu_toggle_music) {
+            musicOn = !musicOn;
+            if (musicOn) {
+                startBackgroundMusic();
+            } else {
+                stopBackgroundMusic();
+            }
+            Toast.makeText(this, "Music " + (musicOn ? "On" : "Off"), Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void resetLevel() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Reset Level")
+                .setMessage("Are you sure you want to reset your level and XP?")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Reset", (dialog, which) -> {
+                    user.setLevel(1);
+                    user.setCurrentXP(0);
+                    userRepository.saveUser(user);
+                    renderUser();
+                })
+                .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bgMusic != null) {
+            bgMusic.release();
+            bgMusic = null;
+        }
     }
 }

@@ -13,4 +13,8 @@
     <string name="habit_name_e_g_read_10_pages">Habit name (e.g. Read 10 pages)</string>
     <string name="delete_habit_ic">Delete habit</string>
     <string name="todo">TODO</string>
+    <string name="reset_level">Reset Level</string>
+    <string name="music_on_off">Music On/Off</string>
+    <string name="about">About</string>
+    <string name="music_on_of">Music On/Off</string>
 </resources>
